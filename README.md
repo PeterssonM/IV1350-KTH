@@ -1,1 +1,1 @@
-# IV1350-KTH-All-Seminars
+# IV1350-KTH

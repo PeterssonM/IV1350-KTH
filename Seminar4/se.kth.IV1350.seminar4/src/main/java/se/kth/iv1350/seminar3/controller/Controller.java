@@ -1,5 +1,7 @@
 package se.kth.iv1350.seminar3.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import se.kth.iv1350.seminar3.model.DTO.ItemDTO;
 import se.kth.iv1350.seminar3.model.DTO.SaleDTO;
 import se.kth.iv1350.seminar3.model.DTO.ReceiptDTO;
@@ -14,6 +16,7 @@ import se.kth.iv1350.seminar3.integration.data.CustomerDB;
 import se.kth.iv1350.seminar3.integration.data.InventorySystemDB;
 import se.kth.iv1350.seminar3.integration.data.SaleLogDB;
 import se.kth.iv1350.seminar3.integration.data.StoreAddressDB;
+import se.kth.iv1350.seminar3.model.AmountPaidObserver;
 import se.kth.iv1350.seminar3.model.Payment.InsufficientFundsException;
 
 /**
@@ -30,23 +33,19 @@ public class Controller {
     private Sale currentSale;
     private Payment payment;
     
+    private List<AmountPaidObserver> listOfAmountPaidObserver = new ArrayList<AmountPaidObserver>();
+
     /**
      * Creates an instance of controller and stores relevant object instances of other classes.
      * @param saleLog - This class instance is stored to be used later.
      * @param storeAddress - This class instance is stored to be used later. 
      */
     public Controller(SaleLogDB saleLog, StoreAddressDB storeAddress){
-        
         this.invSys = new InventorySystemDB();
-        
         this.custDB = new CustomerDB();
-        
         this.accSys = new AccountingSystemDB();
-        
         this.saleLog = saleLog;
-        
         this.storeAddress = storeAddress;
-
         try{
             this.receipt = new Receipt(storeAddress);
         } catch(ConnectionTimedOut e){
@@ -109,8 +108,13 @@ public class Controller {
      */
     public ReceiptDTO registerPayment(float amount) throws ConnectionTimedOut, InsufficientFundsException{
         this.payment = new Payment(amount, accSys);
+        payment.addAmountPaidObservers(listOfAmountPaidObserver);
         
         ReceiptDTO receiptDTO = receipt.printReceipt(this.payment, this.currentSale, this.saleLog, this.invSys);
         return receiptDTO;
+    }
+    
+    public void registerObserver(AmountPaidObserver obs){
+        listOfAmountPaidObserver.add(obs);
     }
 }

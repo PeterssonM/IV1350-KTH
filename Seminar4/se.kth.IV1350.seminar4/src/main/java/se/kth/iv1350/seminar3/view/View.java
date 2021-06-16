@@ -1,8 +1,11 @@
 package se.kth.iv1350.seminar3.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import se.kth.iv1350.seminar3.controller.ConnectionTimedOut;
 
 import se.kth.iv1350.seminar3.controller.Controller;
+//import se.kth.iv1350.seminar3.integration.TotalRevenueFileOutput;
 import se.kth.iv1350.seminar3.integration.data.InventorySystemDB;
 
 import se.kth.iv1350.seminar3.model.DTO.ItemDTO;
@@ -17,23 +20,55 @@ public class View {
     private static final int CUSTOMERID = 1; //Finns customers upp till och med 3.
     private static final int BARCODE = 1; //Finns items upp till och med 10. 
     private static final int QUANTITY = 5; 
-    private static final int AMOUNT = 500;
+    private static final int AMOUNT = 510;
 
     private Controller contr;
     
+    //private List<AmountPaidObserver> listOfAmountPaidObserver;
+
     /**
      * Creates a new instance, that uses the specified controller for all calls to other layers.
      * @param contr the controller to use for all calls to other layers.
      */
     public View (Controller contr){
         this.contr = contr;
+        contr.registerObserver(new TotalRevenueView());
+        contr.registerObserver(new TotalRevenueFileOutput());
     }
-    
+    /**
+     * Reads the list of all observers.
+     * @return the read list.
+     *
+    public List<AmountPaidObserver> getListOfAmountPaidObserver() {
+        return listOfAmountPaidObserver;
+    }
+    /**
+     * Sets the list with a list consisitng of observers.
+     * @param listOfAmountPaidObserver the list that will be stored.
+     *
+    public void setListOfAmountPaidObserver(List<AmountPaidObserver> listOfAmountPaidObserver) {
+        this.listOfAmountPaidObserver = listOfAmountPaidObserver;
+    }
+    /**
+     * Takes one observer and adds it to the observer list.
+     * @param amountPaidObserver the observer object to be added.
+     *
+    @Override
+    public void registerObserver(AmountPaidObserver amountPaidObserver) {
+        listOfAmountPaidObserver.add(amountPaidObserver);
+    }
+    /**
+     * Removes a specific observer object from the observer list.
+     * @param amountPaidObserver the object to remove.
+     *
+    @Override
+    public void removeObserver(AmountPaidObserver amountPaidObserver) {
+        listOfAmountPaidObserver.remove(amountPaidObserver);
+    }*/
     /**
      * Performs a fake sale, by calling all system operations in the controller.
      */
     public void runFakeExecution(){
-        //throws IndexOutOfBoundsException
         try{
             contr.startSale();
             System.out.println("[A new sale has been started]");

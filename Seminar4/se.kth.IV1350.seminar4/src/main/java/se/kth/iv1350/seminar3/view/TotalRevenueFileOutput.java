@@ -1,8 +1,10 @@
-package se.kth.iv1350.seminar3.integration;
+package se.kth.iv1350.seminar3.view;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import se.kth.iv1350.seminar3.model.AmountPaidObserver;
+import se.kth.iv1350.seminar3.model.DTO.PaymentDTO;
 /**
  * This class represents an observer and writes to file once a new amount has been paid.
  */
@@ -29,11 +31,10 @@ public class TotalRevenueFileOutput implements AmountPaidObserver{
      * @param amountPaid 
      */
     @Override
-    public void update(float amountPaid) {
-        this.amountPaid += amountPaid;
+    public void newPayment(PaymentDTO paymentDTO) {
+        this.amountPaid += paymentDTO.getAmountPaid();
         printRevenue(amountPaid);
     }
-
     private void printRevenue(float amountPaid){
         System.out.println("Writing to file '" + FILENAME + "'\n");
         printToFile();
@@ -42,3 +43,4 @@ public class TotalRevenueFileOutput implements AmountPaidObserver{
         amountPaidByCustomerFile.println("Amount paid: " + amountPaid + " SEK");
     }
 }
+

@@ -1,7 +1,9 @@
 package se.kth.iv1350.seminar3.view;
 
-import se.kth.iv1350.seminar3.integration.Subject;
-import se.kth.iv1350.seminar3.integration.AmountPaidObserver;
+import se.kth.iv1350.seminar3.model.AmountPaidObserver;
+import se.kth.iv1350.seminar3.model.DTO.PaymentDTO;
+
+
 
 /**
  * This class represents an observer and print to screen once a new amount has been paid.
@@ -9,7 +11,6 @@ import se.kth.iv1350.seminar3.integration.AmountPaidObserver;
 public class TotalRevenueView implements AmountPaidObserver{
 
     private float amountPaid;
-    private  Subject subject;
 
     /**
      * Constructor to TotalRevenueView.
@@ -18,19 +19,14 @@ public class TotalRevenueView implements AmountPaidObserver{
     public TotalRevenueView(){
         amountPaid = 0;
     }
-    
-    /**
-     * Method is called once a new payment has gone through.
-     * Updates amountPaid and prints to screen.
-     * @param amountPaid 
-     */
     @Override
-    public void update(float amountPaid) {
-        this.amountPaid += amountPaid;
+    public void newPayment(PaymentDTO paymentDTO){
+        //addNewPayment(paymentDTO);
+        System.out.println("The most recent customer paid: " + paymentDTO.getAmountPaid() + " SEK");
+        this.amountPaid += paymentDTO.getAmountPaid();
         printRevenue(amountPaid);
     }
     private void printRevenue(float amountPaid){
-        System.out.println("The most recent customer paid: " + amountPaid + " SEK" +
-                           "\nTotal revenue: " + this.amountPaid + " SEK");
+        System.out.println("Total revenue: " + this.amountPaid + " SEK");
     }
 }
